@@ -132,14 +132,14 @@ export default function BookingModal({ slot, dayIndex, onClose, onBooked }: Prop
             </div>
 
             {/* ── Content ── */}
-            <div style={{ padding: "24px", flex: 1, overflowY: "auto" }}>
+            <div style={{ padding: "20px 24px 28px", flex: 1, overflowY: "auto" }}>
 
               {/* ──── DETAILS ──── */}
               {stage === "details" && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
                   {/* Slot summary */}
-                  <div style={{ background: "#1A1D26", border: "1px solid #2A2D38", borderRadius: 16, padding: "20px 22px" }}>
+                  <div style={{ background: "#0D1117", border: "1.5px solid #2A2D38", borderRadius: 16, padding: "18px 20px" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                       <div>
                         <div style={{ color: "#fff", fontWeight: 700, fontSize: 17, marginBottom: 6 }}>{slot.timeLabel}</div>
@@ -175,8 +175,8 @@ export default function BookingModal({ slot, dayIndex, onClose, onBooked }: Prop
 
                   {/* Add-ons */}
                   <div>
-                    <p style={{ color: "#fff", fontWeight: 600, fontSize: 14, marginBottom: 14 }}>Add-ons (Optional)</p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    <p style={{ color: "#fff", fontWeight: 600, fontSize: 14, marginBottom: 12 }}>Add-ons (Optional)</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                       {equipmentAddOns.map((addon) => {
                         const checked = addOns.includes(addon.id);
                         return (
@@ -184,9 +184,9 @@ export default function BookingModal({ slot, dayIndex, onClose, onBooked }: Prop
                             key={addon.id}
                             style={{
                               display: "flex", alignItems: "center", justifyContent: "space-between",
-                              padding: "14px 16px", borderRadius: 14, cursor: "pointer",
-                              border: checked ? "1.5px solid rgba(0,255,135,.4)" : "1px solid #2A2D38",
-                              background: checked ? "rgba(0,255,135,.05)" : "#1A1D26",
+                              padding: "13px 16px", borderRadius: 12, cursor: "pointer",
+                              border: checked ? "1.5px solid rgba(0,255,135,.4)" : "1px solid #252833",
+                              background: checked ? "rgba(0,255,135,.05)" : "#0D1117",
                               transition: "border-color .15s, background .15s",
                             }}
                           >
@@ -211,7 +211,7 @@ export default function BookingModal({ slot, dayIndex, onClose, onBooked }: Prop
                   </div>
 
                   {/* Total */}
-                  <div style={{ background: "#1A1D26", border: "1px solid #2A2D38", borderRadius: 16, padding: "20px 22px" }}>
+                  <div style={{ background: "#0D1117", border: "1.5px solid #2A2D38", borderRadius: 16, padding: "18px 20px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: "#666", marginBottom: 10 }}>
                       <span>Slot (1 hour)</span><span>₹{slot.price}</span>
                     </div>
