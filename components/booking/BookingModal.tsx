@@ -27,8 +27,7 @@ function ConfettiPiece({ color, delay }: { color: string; delay: number }) {
   const x = (Math.random() - 0.5) * 400;
   return (
     <motion.div
-      className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-sm"
-      style={{ background: color }}
+      style={{ position: "absolute", top: "50%", left: "50%", width: 10, height: 10, borderRadius: 2, background: color }}
       initial={{ x: 0, y: 0, rotate: 0, opacity: 1 }}
       animate={{ x, y: 300 + Math.random() * 200, rotate: 720, opacity: 0 }}
       transition={{ duration: 1.2, delay, ease: "easeOut" }}
@@ -87,100 +86,124 @@ export default function BookingModal({ slot, dayIndex, onClose, onBooked }: Prop
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.75)", backdropFilter: "blur(6px)", zIndex: 50 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={stage !== "payment" ? onClose : undefined}
           />
 
           {/* Modal */}
           <motion.div
-            className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-50 flex flex-col bg-[#111111] md:rounded-2xl md:border md:border-[#2A2A2A] md:w-full md:max-w-md md:max-h-[90vh] overflow-y-auto shadow-2xl"
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 50,
+              display: "flex",
+              flexDirection: "column",
+              background: "#111318",
+              overflowY: "auto",
+            }}
+            className="md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-2xl md:border md:border-[#2A2A2A] md:w-full md:max-w-md md:max-h-[90vh] shadow-2xl"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-[#2A2A2A] sticky top-0 bg-[#111111] z-10">
+            {/* ── Header ── */}
+            <div style={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              padding: "22px 24px", borderBottom: "1px solid #222530",
+              position: "sticky", top: 0, background: "#111318", zIndex: 10,
+            }}>
               <div>
-                <h2 className="text-white font-bold text-lg">
+                <h2 style={{ color: "#fff", fontWeight: 700, fontSize: 18, lineHeight: 1.2 }}>
                   {stage === "success" ? "Booking Confirmed! 🎉" : "Book This Slot"}
                 </h2>
-                <p className="text-gray-500 text-xs mt-0.5">{dateInfo?.fullDate}</p>
+                <p style={{ color: "#666", fontSize: 12, marginTop: 4 }}>{dateInfo?.fullDate}</p>
               </div>
               {stage !== "payment" && (
-                <button onClick={onClose} className="w-8 h-8 rounded-full bg-[#2A2A2A] flex items-center justify-center hover:bg-[#3A3A3A] transition-colors">
+                <button onClick={onClose} style={{
+                  width: 34, height: 34, borderRadius: "50%", background: "#222530",
+                  border: "none", display: "flex", alignItems: "center", justifyContent: "center",
+                  cursor: "pointer", color: "#aaa", flexShrink: 0,
+                }}>
                   <X size={15} />
                 </button>
               )}
             </div>
 
-            <div className="p-5 flex-1 overflow-y-auto">
-              {/* ---- DETAILS STAGE ---- */}
+            {/* ── Content ── */}
+            <div style={{ padding: "24px", flex: 1, overflowY: "auto" }}>
+
+              {/* ──── DETAILS ──── */}
               {stage === "details" && (
-                <div className="space-y-6">
+                <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+
                   {/* Slot summary */}
-                  <div className="bg-[#1A1A1A] border border-[#2A2A2A] rounded-xl p-4">
-                    <div className="flex items-center justify-between">
+                  <div style={{ background: "#1A1D26", border: "1px solid #2A2D38", borderRadius: 16, padding: "20px 22px" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                       <div>
-                        <div className="text-white font-bold">{slot.timeLabel}</div>
-                        <div className="text-gray-500 text-xs mt-0.5">{slot.isPeak ? "🔥 Peak Hours" : slot.label + " Slot"}</div>
+                        <div style={{ color: "#fff", fontWeight: 700, fontSize: 17, marginBottom: 6 }}>{slot.timeLabel}</div>
+                        <div style={{ color: "#666", fontSize: 12 }}>{slot.isPeak ? "🔥 Peak Hours" : slot.label + " Slot"}</div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-[#00FF87] font-black text-2xl" style={{ fontFamily: "Impact, sans-serif" }}>₹{slot.price}</div>
-                        <div className="text-gray-500 text-xs">/hr</div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ fontFamily: "var(--font-bebas), Impact, sans-serif", color: "#00FF87", fontSize: 36, lineHeight: 1 }}>₹{slot.price}</div>
+                        <div style={{ color: "#555", fontSize: 12, marginTop: 2 }}>/hr</div>
                       </div>
                     </div>
                   </div>
 
                   {/* Player count */}
                   <div>
-                    <label className="text-white font-semibold text-sm block mb-3">Number of Players</label>
-                    <div className="flex items-center gap-4">
+                    <p style={{ color: "#fff", fontWeight: 600, fontSize: 14, marginBottom: 14 }}>Number of Players</p>
+                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                       <button
                         onClick={() => setPlayers((p) => Math.max(4, p - 1))}
-                        className="w-10 h-10 rounded-full bg-[#2A2A2A] hover:bg-[#3A3A3A] flex items-center justify-center transition-colors"
+                        style={{ width: 42, height: 42, borderRadius: "50%", background: "#1A1D26", border: "1px solid #2A2D38", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#ccc", flexShrink: 0 }}
                       >
                         <Minus size={16} />
                       </button>
-                      <span className="text-white font-black text-3xl min-w-[40px] text-center" style={{ fontFamily: "Impact, sans-serif" }}>{players}</span>
+                      <span style={{ fontFamily: "var(--font-bebas), Impact, sans-serif", color: "#fff", fontSize: 38, lineHeight: 1, minWidth: 44, textAlign: "center" }}>{players}</span>
                       <button
                         onClick={() => setPlayers((p) => Math.min(12, p + 1))}
-                        className="w-10 h-10 rounded-full bg-[#2A2A2A] hover:bg-[#3A3A3A] flex items-center justify-center transition-colors"
+                        style={{ width: 42, height: 42, borderRadius: "50%", background: "#1A1D26", border: "1px solid #2A2D38", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#ccc", flexShrink: 0 }}
                       >
                         <Plus size={16} />
                       </button>
-                      <span className="text-gray-500 text-sm">players (max 12)</span>
+                      <span style={{ color: "#666", fontSize: 13 }}>players (max 12)</span>
                     </div>
                   </div>
 
                   {/* Add-ons */}
                   <div>
-                    <label className="text-white font-semibold text-sm block mb-3">Add-ons (Optional)</label>
-                    <div className="space-y-2">
+                    <p style={{ color: "#fff", fontWeight: 600, fontSize: 14, marginBottom: 14 }}>Add-ons (Optional)</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                       {equipmentAddOns.map((addon) => {
                         const checked = addOns.includes(addon.id);
                         return (
                           <label
                             key={addon.id}
-                            className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
-                              checked
-                                ? "border-[#00FF87]/50 bg-[#00FF87]/5"
-                                : "border-[#2A2A2A] bg-[#1A1A1A] hover:border-[#3A3A3A]"
-                            }`}
+                            style={{
+                              display: "flex", alignItems: "center", justifyContent: "space-between",
+                              padding: "14px 16px", borderRadius: 14, cursor: "pointer",
+                              border: checked ? "1.5px solid rgba(0,255,135,.4)" : "1px solid #2A2D38",
+                              background: checked ? "rgba(0,255,135,.05)" : "#1A1D26",
+                              transition: "border-color .15s, background .15s",
+                            }}
                           >
-                            <div className="flex items-center gap-3">
-                              <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
-                                checked ? "bg-[#00FF87] border-[#00FF87]" : "border-[#3A3A3A]"
-                              }`}>
-                                {checked && <Check size={11} className="text-black" />}
+                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                              <div style={{
+                                width: 20, height: 20, borderRadius: 6, flexShrink: 0,
+                                border: checked ? "2px solid #00FF87" : "2px solid #3A3D4A",
+                                background: checked ? "#00FF87" : "transparent",
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                transition: "all .15s",
+                              }}>
+                                {checked && <Check size={11} color="#000" />}
                               </div>
-                              <span className="text-gray-200 text-sm">{addon.name}</span>
+                              <span style={{ color: checked ? "#fff" : "#ccc", fontSize: 14 }}>{addon.name}</span>
                             </div>
-                            <span className="text-gray-400 text-sm font-semibold">+₹{addon.price}</span>
-                            <input type="checkbox" className="hidden" checked={checked} onChange={() => toggleAddOn(addon.id)} />
+                            <span style={{ color: "#888", fontSize: 14, fontWeight: 600 }}>+₹{addon.price}</span>
+                            <input type="checkbox" style={{ display: "none" }} checked={checked} onChange={() => toggleAddOn(addon.id)} />
                           </label>
                         );
                       })}
@@ -188,34 +211,47 @@ export default function BookingModal({ slot, dayIndex, onClose, onBooked }: Prop
                   </div>
 
                   {/* Total */}
-                  <div className="bg-[#1A1A1A] border border-[#2A2A2A] rounded-xl p-4">
-                    <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
+                  <div style={{ background: "#1A1D26", border: "1px solid #2A2D38", borderRadius: 16, padding: "20px 22px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: "#666", marginBottom: 10 }}>
                       <span>Slot (1 hour)</span><span>₹{slot.price}</span>
                     </div>
                     {addOnTotal > 0 && (
-                      <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: "#666", marginBottom: 10 }}>
                         <span>Add-ons</span><span>₹{addOnTotal}</span>
                       </div>
                     )}
-                    <div className="border-t border-[#2A2A2A] pt-2 flex items-center justify-between">
-                      <span className="text-white font-bold">Total</span>
-                      <span className="text-[#00FF87] font-black text-xl" style={{ fontFamily: "Impact, sans-serif" }}>₹{total}</span>
+                    <div style={{ borderTop: "1px solid #2A2D38", paddingTop: 14, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ color: "#fff", fontWeight: 700, fontSize: 15 }}>Total</span>
+                      <span style={{ fontFamily: "var(--font-bebas), Impact, sans-serif", color: "#00FF87", fontSize: 30, lineHeight: 1 }}>₹{total}</span>
                     </div>
                   </div>
 
                   {/* CTA Buttons */}
-                  <div className="space-y-3">
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                     <button
                       onClick={handlePayOnline}
-                      className="w-full bg-[#00FF87] hover:bg-[#00e07a] text-black font-black py-4 rounded-xl text-sm uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,255,135,0.3)]"
+                      style={{
+                        width: "100%", background: "#00FF87", color: "#000",
+                        fontWeight: 800, fontSize: 14, letterSpacing: "0.08em",
+                        textTransform: "uppercase", padding: "17px 24px",
+                        borderRadius: 14, border: "none", cursor: "pointer",
+                        boxShadow: "0 0 24px rgba(0,255,135,.35)", transition: "background .15s",
+                      }}
                     >
                       BOOK & PAY ONLINE — ₹{total}
                     </button>
                     <button
                       onClick={handleWhatsApp}
-                      className="w-full border border-[#25D366]/50 hover:bg-[#25D366]/10 text-white font-bold py-4 rounded-xl text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                      style={{
+                        width: "100%", background: "transparent", color: "#fff",
+                        fontWeight: 700, fontSize: 14, letterSpacing: "0.06em",
+                        textTransform: "uppercase", padding: "16px 24px",
+                        borderRadius: 14, border: "1.5px solid rgba(37,211,102,.4)",
+                        cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                        transition: "background .15s",
+                      }}
                     >
-                      <svg viewBox="0 0 24 24" className="w-4 h-4 fill-[#25D366]">
+                      <svg viewBox="0 0 24 24" style={{ width: 16, height: 16, fill: "#25D366", flexShrink: 0 }}>
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                       </svg>
                       BOOK VIA WHATSAPP
@@ -224,79 +260,65 @@ export default function BookingModal({ slot, dayIndex, onClose, onBooked }: Prop
                 </div>
               )}
 
-              {/* ---- PAYMENT STAGE ---- */}
+              {/* ──── PAYMENT ──── */}
               {stage === "payment" && (
-                <div className="flex flex-col items-center justify-center py-16 gap-6">
-                  <div className="w-20 h-20 rounded-full border-4 border-[#00FF87]/30 border-t-[#00FF87] flex items-center justify-center">
-                    <Loader2 size={36} className="text-[#00FF87] animate-spin" />
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 0", gap: 24 }}>
+                  <div style={{ width: 80, height: 80, borderRadius: "50%", border: "4px solid rgba(0,255,135,.25)", borderTopColor: "#00FF87", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Loader2 size={36} color="#00FF87" className="animate-spin" />
                   </div>
-                  <div className="text-center">
-                    <h3 className="text-white font-bold text-lg">Processing Payment</h3>
-                    <p className="text-gray-400 text-sm mt-1">Connecting to payment gateway...</p>
+                  <div style={{ textAlign: "center" }}>
+                    <h3 style={{ color: "#fff", fontWeight: 700, fontSize: 18 }}>Processing Payment</h3>
+                    <p style={{ color: "#666", fontSize: 13, marginTop: 6 }}>Connecting to payment gateway...</p>
                   </div>
-                  {/* Fake Razorpay UI */}
-                  <div className="w-full bg-[#1A1A1A] border border-[#2A2A2A] rounded-xl p-4 space-y-3">
-                    <div className="flex items-center gap-2 text-sm text-gray-400">
-                      <div className="w-8 h-5 bg-[#2A2A2A] rounded shimmer" />
+                  <div style={{ width: "100%", background: "#1A1D26", border: "1px solid #2A2D38", borderRadius: 16, padding: "20px 22px", display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#666" }}>
+                      <div style={{ width: 36, height: 20, background: "#2A2D38", borderRadius: 4 }} className="shimmer" />
                       <span>Razorpay Secure Payment</span>
                     </div>
-                    <div className="h-10 bg-[#2A2A2A] rounded-lg shimmer" />
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="h-10 bg-[#2A2A2A] rounded-lg shimmer" />
-                      <div className="h-10 bg-[#2A2A2A] rounded-lg shimmer" />
+                    <div style={{ height: 40, background: "#2A2D38", borderRadius: 10 }} className="shimmer" />
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                      <div style={{ height: 40, background: "#2A2D38", borderRadius: 10 }} className="shimmer" />
+                      <div style={{ height: 40, background: "#2A2D38", borderRadius: 10 }} className="shimmer" />
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* ---- SUCCESS STAGE ---- */}
+              {/* ──── SUCCESS ──── */}
               {stage === "success" && (
-                <div className="relative">
-                  {/* Confetti */}
+                <div style={{ position: "relative" }}>
                   {confetti && (
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                    <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
                       {Array.from({ length: 24 }).map((_, i) => (
-                        <ConfettiPiece
-                          key={i}
-                          color={CONFETTI_COLORS[i % CONFETTI_COLORS.length]}
-                          delay={i * 0.04}
-                        />
+                        <ConfettiPiece key={i} color={CONFETTI_COLORS[i % CONFETTI_COLORS.length]} delay={i * 0.04} />
                       ))}
                     </div>
                   )}
 
-                  <div className="flex flex-col items-center py-8 gap-6 relative z-10">
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "32px 0", gap: 24, position: "relative", zIndex: 1 }}>
                     <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
+                      initial={{ scale: 0 }} animate={{ scale: 1 }}
                       transition={{ type: "spring", stiffness: 300, delay: 0.1 }}
-                      className="w-20 h-20 rounded-full bg-[#00FF87]/20 border-2 border-[#00FF87] flex items-center justify-center shadow-[0_0_30px_rgba(0,255,135,0.4)]"
+                      style={{ width: 80, height: 80, borderRadius: "50%", background: "rgba(0,255,135,.15)", border: "2px solid #00FF87", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 30px rgba(0,255,135,.4)" }}
                     >
-                      <Check size={36} className="text-[#00FF87]" />
+                      <Check size={36} color="#00FF87" />
                     </motion.div>
 
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
-                      className="text-center"
-                    >
-                      <h3 className="text-white font-black text-2xl">Booking Confirmed!</h3>
-                      <p className="text-gray-400 text-sm mt-1">See you on the pitch 🏏</p>
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ textAlign: "center" }}>
+                      <h3 style={{ color: "#fff", fontWeight: 800, fontSize: 24 }}>Booking Confirmed!</h3>
+                      <p style={{ color: "#666", fontSize: 14, marginTop: 6 }}>See you on the pitch 🏏</p>
                     </motion.div>
 
                     {/* Booking card */}
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 }}
-                      className="w-full bg-[#1A1A1A] border border-[#00FF87]/20 rounded-2xl p-5 space-y-3"
+                      initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+                      style={{ width: "100%", background: "#1A1D26", border: "1px solid rgba(0,255,135,.2)", borderRadius: 20, padding: "22px" }}
                     >
-                      <div className="flex items-center justify-between text-xs text-gray-500 uppercase tracking-wider">
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#666", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 14 }}>
                         <span>Booking ID</span>
-                        <span className="text-[#00FF87] font-bold">{bookingId}</span>
+                        <span style={{ color: "#00FF87", fontWeight: 700 }}>{bookingId}</span>
                       </div>
-                      <div className="border-t border-[#2A2A2A] pt-3 space-y-2">
+                      <div style={{ borderTop: "1px solid #2A2D38", paddingTop: 16, display: "flex", flexDirection: "column", gap: 12 }}>
                         {[
                           { l: "Ground", v: "Cairo Box Cricket" },
                           { l: "Date", v: dateInfo?.fullDate ?? "" },
@@ -304,28 +326,26 @@ export default function BookingModal({ slot, dayIndex, onClose, onBooked }: Prop
                           { l: "Players", v: String(players) },
                           { l: "Amount Paid", v: `₹${total}` },
                         ].map(({ l, v }) => (
-                          <div key={l} className="flex items-center justify-between text-sm">
-                            <span className="text-gray-500">{l}</span>
-                            <span className="text-white font-semibold">{v}</span>
+                          <div key={l} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 14 }}>
+                            <span style={{ color: "#666" }}>{l}</span>
+                            <span style={{ color: "#fff", fontWeight: 600 }}>{v}</span>
                           </div>
                         ))}
                       </div>
                     </motion.div>
 
-                    {/* WhatsApp confirmation card */}
+                    {/* WhatsApp confirmation */}
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.7 }}
-                      className="w-full bg-[#25D366]/10 border border-[#25D366]/30 rounded-2xl p-4"
+                      initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}
+                      style={{ width: "100%", background: "rgba(37,211,102,.07)", border: "1px solid rgba(37,211,102,.25)", borderRadius: 18, padding: "18px 20px" }}
                     >
-                      <div className="flex items-start gap-3">
-                        <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#25D366] flex-shrink-0 mt-0.5">
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
+                        <svg viewBox="0 0 24 24" style={{ width: 20, height: 20, fill: "#25D366", flexShrink: 0, marginTop: 2 }}>
                           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                         </svg>
                         <div>
-                          <p className="text-[#25D366] font-bold text-sm">WhatsApp Confirmation Sent</p>
-                          <p className="text-gray-300 text-xs mt-1 italic">
+                          <p style={{ color: "#25D366", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>WhatsApp Confirmation Sent</p>
+                          <p style={{ color: "#aaa", fontSize: 12, lineHeight: 1.6, fontStyle: "italic" }}>
                             "Booking confirmed! See you on the pitch. Slot: {slot.timeLabel} on {dateInfo?.shortDate}. Booking ID: {bookingId}. — Cairo Box Cricket 🏏"
                           </p>
                         </div>
@@ -334,7 +354,11 @@ export default function BookingModal({ slot, dayIndex, onClose, onBooked }: Prop
 
                     <button
                       onClick={onClose}
-                      className="w-full bg-[#1A1A1A] hover:bg-[#2A2A2A] border border-[#2A2A2A] text-gray-300 font-bold py-3 rounded-xl text-sm transition-colors"
+                      style={{
+                        width: "100%", background: "#1A1D26", border: "1px solid #2A2D38",
+                        color: "#ccc", fontWeight: 700, fontSize: 14, padding: "15px",
+                        borderRadius: 14, cursor: "pointer", transition: "background .15s",
+                      }}
                     >
                       Done
                     </button>

@@ -35,46 +35,61 @@ export default function BookPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-[#0A0A0A] pt-32 pb-24 md:pb-8">
-        <div className="max-w-3xl mx-auto px-4">
+      <div style={{ minHeight: "100vh", background: "#08080A", paddingTop: 128, paddingBottom: 96 }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 20px" }}>
+
           {/* Header */}
           <motion.div
-            className="mb-8"
+            style={{ marginBottom: 36 }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <span className="text-[#00FF87] text-xs font-bold tracking-widest uppercase">Cairo Box Cricket</span>
-            <h1
-              className="text-4xl md:text-5xl font-black text-white mt-1 uppercase"
-              style={{ fontFamily: "Impact, sans-serif" }}
-            >
+            <span style={{ color: "#00FF87", fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}>
+              Cairo Box Cricket
+            </span>
+            <h1 style={{
+              fontFamily: "var(--font-bebas), Impact, sans-serif",
+              fontSize: "clamp(3rem, 10vw, 5rem)",
+              color: "#fff", lineHeight: 1, marginTop: 6, marginBottom: 10, display: "block",
+            }}>
               BOOK A SLOT
             </h1>
-            <p className="text-gray-400 mt-2 text-sm">
+            <p style={{ color: "#666", fontSize: 14, lineHeight: 1.6 }}>
               Select a date and available time slot. Instant confirmation.
             </p>
           </motion.div>
 
           {/* Date Selector */}
           <motion.div
-            className="mb-8"
+            style={{ marginBottom: 32 }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-3">Select Date</p>
+            <p style={{ color: "#555", fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 14 }}>
+              Select Date
+            </p>
             <DateSelector selected={selectedDay} onSelect={setSelectedDay} />
           </motion.div>
 
-          {/* Selected date label */}
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-white font-bold text-sm">
+          {/* Date label + legend */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
+            <p style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>
               {dates[selectedDay]?.fullDate}
             </p>
-            <div className="flex items-center gap-3 text-xs text-gray-500">
-              <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-[#00FF87]/40 border border-[#00FF87]/60" /> Available</span>
-              <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-red-500/30 border border-red-500/40" /> Booked</span>
-              <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-yellow-400/30 border border-yellow-400/40" /> Peak</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 11, color: "#666" }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: 2, background: "rgba(0,255,135,.3)", border: "1px solid rgba(0,255,135,.5)", display: "inline-block" }} />
+                Available
+              </span>
+              <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: 2, background: "rgba(248,113,113,.25)", border: "1px solid rgba(248,113,113,.35)", display: "inline-block" }} />
+                Booked
+              </span>
+              <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: 2, background: "rgba(251,191,36,.25)", border: "1px solid rgba(251,191,36,.35)", display: "inline-block" }} />
+                Peak
+              </span>
             </div>
           </div>
 
@@ -109,11 +124,12 @@ export default function BookPage() {
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
-            className="fixed bottom-20 md:bottom-6 left-4 right-4 md:left-auto md:right-6 md:w-96 z-50"
+            style={{ position: "fixed", bottom: 80, left: 16, right: 16, zIndex: 50 }}
+            className="md:bottom-6 md:left-auto md:right-6 md:w-96"
           >
-            <div className="bg-[#1A1A1A] border border-[#00FF87]/40 rounded-xl px-4 py-3 flex items-center gap-3 shadow-2xl">
-              <CheckCircle2 size={20} className="text-[#00FF87] flex-shrink-0" />
-              <p className="text-white text-sm">{toast}</p>
+            <div style={{ background: "#1A1D26", border: "1px solid rgba(0,255,135,.35)", borderRadius: 16, padding: "14px 18px", display: "flex", alignItems: "center", gap: 12, boxShadow: "0 8px 32px rgba(0,0,0,.5)" }}>
+              <CheckCircle2 size={20} color="#00FF87" style={{ flexShrink: 0 }} />
+              <p style={{ color: "#fff", fontSize: 14 }}>{toast}</p>
             </div>
           </motion.div>
         )}
