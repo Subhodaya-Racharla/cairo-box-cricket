@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import MobileNav from "@/components/layout/MobileNav";
@@ -10,6 +10,14 @@ import DemoRibbon from "@/components/layout/DemoRibbon";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+const bebas = Bebas_Neue({
+  variable: "--font-bebas",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -31,8 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-[#0A0A0A] text-white font-[var(--font-inter)]">
+    <html lang="en" className={`${inter.variable} ${bebas.variable} h-full`}>
+      <body className="min-h-full flex flex-col">
         <DemoRibbon />
         <Navbar />
         <main className="flex-1">{children}</main>

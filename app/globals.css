@@ -1,78 +1,289 @@
 @import "tailwindcss";
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+/* =====================================================
+   CAIRO BOX CRICKET — GLOBAL STYLES
+   Tailwind v4 CSS-first configuration
+   ===================================================== */
+
+@theme {
+  --color-neon: #00FF87;
+  --color-neon-dim: #00cc6a;
+  --color-blue: #00B4FF;
+  --color-gold: #FFB800;
+  --color-base: #0A0A0A;
+  --color-card: #111111;
+  --color-card2: #1A1A1A;
+  --color-border: #222222;
+  --color-border2: #2A2A2A;
+
+  --font-display: var(--font-bebas), "Impact", "Arial Narrow", sans-serif;
+  --font-body: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* =====================================================
+   BASE RESET & BODY
+   ===================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
   background-color: #0A0A0A;
   color: #ffffff;
+  font-family: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #1A1A1A; }
-::-webkit-scrollbar-thumb { background: #00FF87; border-radius: 3px; }
+/* All headings use Bebas Neue */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-bebas), "Impact", "Arial Narrow", sans-serif;
+  letter-spacing: 0.02em;
+}
+
+/* =====================================================
+   CUSTOM SCROLLBAR
+   ===================================================== */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: #00FF87; border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: #00cc6a; }
 
-/* Neon glow utilities */
-.glow-green { box-shadow: 0 0 10px rgba(0,255,135,0.4), 0 0 20px rgba(0,255,135,0.2); }
-.glow-green-text { text-shadow: 0 0 10px rgba(0,255,135,0.6); }
-.glow-blue { box-shadow: 0 0 10px rgba(0,180,255,0.4), 0 0 20px rgba(0,180,255,0.2); }
+/* =====================================================
+   FOCUS RING
+   ===================================================== */
+:focus-visible { outline: 2px solid #00FF87; outline-offset: 3px; border-radius: 4px; }
+button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
 
-/* Live pulse dot */
+/* =====================================================
+   NEON GLOW UTILITIES
+   ===================================================== */
+.glow-green {
+  box-shadow: 0 0 12px rgba(0,255,135,0.5), 0 0 30px rgba(0,255,135,0.2);
+}
+.glow-green-sm { box-shadow: 0 0 8px rgba(0,255,135,0.4); }
+.glow-blue { box-shadow: 0 0 12px rgba(0,180,255,0.5), 0 0 30px rgba(0,180,255,0.2); }
+.glow-gold { box-shadow: 0 0 12px rgba(255,184,0,0.5), 0 0 30px rgba(255,184,0,0.2); }
+
+/* =====================================================
+   GRADIENT TEXT
+   ===================================================== */
+.text-gradient-green {
+  background: linear-gradient(135deg, #00FF87 0%, #00d4ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-gold {
+  background: linear-gradient(135deg, #FFB800 0%, #ff6b00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-white {
+  background: linear-gradient(135deg, #ffffff 0%, #aaaaaa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* =====================================================
+   LIVE PULSE DOT
+   ===================================================== */
 .live-dot {
+  display: inline-block;
   width: 8px; height: 8px;
-  background: #ff4444;
+  background: #ff3b3b;
   border-radius: 50%;
-  animation: livePulse 1.5s ease-in-out infinite;
+  animation: livePulse 1.6s ease-in-out infinite;
 }
-
 @keyframes livePulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.3); }
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(255,59,59,0.5); }
+  50% { opacity: 0.7; transform: scale(1.2); box-shadow: 0 0 0 4px rgba(255,59,59,0); }
 }
 
-/* Gradient text */
-.gradient-text-green {
-  background: linear-gradient(135deg, #00FF87 0%, #00B4FF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.gradient-text-gold {
-  background: linear-gradient(135deg, #FFB800 0%, #FF6B00 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* =====================================================
+   GLASS CARD
+   ===================================================== */
+.glass {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
-/* Card hover lift */
-.card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-.card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+/* =====================================================
+   CARD HOVER LIFT
+   ===================================================== */
+.card-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
+}
+.card-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
 
-/* Focus styles */
-button:focus-visible, a:focus-visible { outline: 2px solid #00FF87; outline-offset: 2px; }
+/* =====================================================
+   SHIMMER SKELETON
+   ===================================================== */
+.shimmer {
+  background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+  background-size: 400px 100%;
+  animation: shimmerMove 1.4s infinite;
+}
+@keyframes shimmerMove {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
 
-/* Recharts overrides */
+/* =====================================================
+   SLOT CARDS
+   ===================================================== */
+.slot-available {
+  border: 1.5px solid rgba(0,255,135,0.3);
+  background: rgba(0,255,135,0.04);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.slot-available:hover {
+  border-color: #00FF87;
+  background: rgba(0,255,135,0.09);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,255,135,0.2);
+}
+.slot-peak {
+  border: 1.5px solid rgba(255,184,0,0.4);
+  background: rgba(255,184,0,0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.slot-peak:hover {
+  border-color: #FFB800;
+  background: rgba(255,184,0,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255,184,0,0.2);
+}
+.slot-booked {
+  border: 1.5px solid rgba(255,70,70,0.2);
+  background: rgba(255,70,70,0.04);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.slot-live {
+  border: 1.5px solid rgba(255,184,0,0.7);
+  background: rgba(255,184,0,0.08);
+  animation: slotLivePulse 2s ease-in-out infinite;
+}
+@keyframes slotLivePulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255,184,0,0.2); }
+  50% { box-shadow: 0 0 20px rgba(255,184,0,0.4); }
+}
+
+/* =====================================================
+   RECHARTS OVERRIDES
+   ===================================================== */
+.recharts-cartesian-grid line { stroke: #222 !important; }
 .recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line { stroke: #2A2A2A; }
-.recharts-text { fill: #888 !important; font-size: 11px !important; }
+.recharts-cartesian-grid-vertical line { stroke: #222 !important; }
+.recharts-tooltip-wrapper { outline: none !important; }
+svg text { fill: #666 !important; font-size: 11px !important; font-family: var(--font-inter) !important; }
 
-/* No select */
-.no-select { -webkit-user-select: none; user-select: none; }
+/* =====================================================
+   SCROLLBAR HIDE UTILITY
+   ===================================================== */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Confetti */
-@keyframes confettiFall {
-  0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+/* =====================================================
+   GRADIENT BACKGROUNDS (section accents)
+   ===================================================== */
+.bg-glow-green { background: radial-gradient(ellipse at center, rgba(0,255,135,0.08) 0%, transparent 65%); }
+.bg-glow-blue  { background: radial-gradient(ellipse at center, rgba(0,180,255,0.08) 0%, transparent 65%); }
+.bg-glow-gold  { background: radial-gradient(ellipse at center, rgba(255,184,0,0.08) 0%, transparent 65%); }
+
+/* =====================================================
+   NOISE TEXTURE (adds depth to dark backgrounds)
+   ===================================================== */
+.noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
 }
-.confetti-piece { animation: confettiFall linear forwards; }
+
+/* =====================================================
+   SAFE AREA (mobile bottom nav)
+   ===================================================== */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* =====================================================
+   GRADIENT BORDER CARD
+   ===================================================== */
+.border-gradient-green {
+  position: relative;
+  background: #1A1A1A;
+  border-radius: 16px;
+}
+.border-gradient-green::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0,255,135,0.4), rgba(0,180,255,0.1), rgba(0,255,135,0.05));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* =====================================================
+   NEON BUTTON
+   ===================================================== */
+.btn-neon {
+  background: #00FF87;
+  color: #000;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 20px rgba(0,255,135,0.3), 0 4px 16px rgba(0,0,0,0.4);
+}
+.btn-neon:hover {
+  background: #00e07a;
+  box-shadow: 0 0 35px rgba(0,255,135,0.5), 0 8px 24px rgba(0,0,0,0.4);
+  transform: translateY(-2px);
+}
+.btn-neon:active { transform: translateY(0); }
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+.btn-outline:hover {
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.05);
+}
+
+/* =====================================================
+   CONFETTI ANIMATION
+   ===================================================== */
+@keyframes confettiFall {
+  0%   { transform: translateY(-40px) rotate(0deg) scale(1); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(90vh) rotate(900deg) scale(0.5); opacity: 0; }
+}

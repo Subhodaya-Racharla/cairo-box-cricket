@@ -21,116 +21,99 @@ interface Props {
   justBookedId: string | null;
 }
 
-const labelColors: Record<string, string> = {
-  EARLY: "text-blue-400 bg-blue-400/10",
-  DAY: "text-sky-400 bg-sky-400/10",
-  PEAK: "text-yellow-400 bg-yellow-400/10",
-  NIGHT: "text-purple-400 bg-purple-400/10",
+const labelStyles: Record<string, string> = {
+  EARLY: "text-sky-400 bg-sky-400/10 border border-sky-400/20",
+  DAY:   "text-blue-300 bg-blue-300/10 border border-blue-300/20",
+  PEAK:  "text-yellow-400 bg-yellow-400/10 border border-yellow-400/20",
+  NIGHT: "text-purple-400 bg-purple-400/10 border border-purple-400/20",
 };
 
 export default function SlotGrid({ dayIndex, onSlotClick, justBookedId }: Props) {
   const [slots, setSlots] = useState<Slot[]>(() => generateSlots(dayIndex));
 
-  useEffect(() => {
-    setSlots(generateSlots(dayIndex));
-  }, [dayIndex]);
+  useEffect(() => { setSlots(generateSlots(dayIndex)); }, [dayIndex]);
 
-  // Randomly animate one available slot to "just booked" every 30s
+  // Live animation: one available slot → just_booked every 30s
   useEffect(() => {
-    const timer = setInterval(() => {
+    const id = setInterval(() => {
       setSlots((prev) => {
-        const available = prev.filter((s) => s.status === "available");
-        if (available.length === 0) return prev;
-        const pick = available[Math.floor(Math.random() * available.length)];
-        return prev.map((s) =>
-          s.id === pick.id ? { ...s, status: "just_booked" } : s
-        );
+        const avail = prev.filter((s) => s.status === "available");
+        if (!avail.length) return prev;
+        const pick = avail[Math.floor(Math.random() * avail.length)];
+        return prev.map((s) => s.id === pick.id ? { ...s, status: "just_booked" } : s);
       });
-      setTimeout(() => {
-        setSlots((prev) =>
-          prev.map((s) => (s.status === "just_booked" ? { ...s, status: "booked" } : s))
-        );
-      }, 4000);
+      setTimeout(() => setSlots((prev) => prev.map((s) => s.status === "just_booked" ? { ...s, status: "booked" } : s)), 4500);
     }, 30000);
-    return () => clearInterval(timer);
+    return () => clearInterval(id);
   }, []);
 
-  const getSlotStyle = (slot: Slot) => {
-    if (slot.id === justBookedId || slot.status === "just_booked") {
-      return "border-yellow-400 bg-yellow-400/10 shadow-[0_0_15px_rgba(255,184,0,0.25)] cursor-default";
-    }
-    if (slot.status === "booked") {
-      return "border-red-500/40 bg-red-500/5 opacity-60 cursor-not-allowed";
-    }
-    if (slot.isPeak) {
-      return "border-yellow-400/50 bg-yellow-400/5 hover:border-yellow-400 hover:bg-yellow-400/10 hover:shadow-[0_0_15px_rgba(255,184,0,0.2)] cursor-pointer transition-all duration-200";
-    }
-    return "border-[#00FF87]/30 bg-[#00FF87]/5 hover:border-[#00FF87] hover:bg-[#00FF87]/10 hover:shadow-[0_0_15px_rgba(0,255,135,0.2)] hover:-translate-y-0.5 cursor-pointer transition-all duration-200";
+  const getClass = (slot: Slot) => {
+    if (slot.id === justBookedId) return "slot-live";
+    if (slot.status === "just_booked") return "slot-live";
+    if (slot.status === "booked") return "slot-booked";
+    if (slot.isPeak) return "slot-peak";
+    return "slot-available";
   };
 
-  const handleClick = (slot: Slot) => {
-    if (slot.status === "available" || slot.status === "just_booked") {
-      onSlotClick(slot);
-    }
-  };
+  const canClick = (slot: Slot) => slot.status === "available" || slot.status === "just_booked";
 
   return (
     <div className="space-y-2">
       {slots.map((slot, i) => (
         <motion.div
           key={slot.id}
-          initial={{ opacity: 0, x: -10 }}
+          initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: i * 0.018, duration: 0.3 }}
-          onClick={() => handleClick(slot)}
-          onKeyDown={(e) => e.key === "Enter" && handleClick(slot)}
-          role={slot.status === "available" ? "button" : undefined}
-          tabIndex={slot.status === "available" ? 0 : undefined}
-          className={`border rounded-xl p-3 md:p-4 flex items-center gap-3 md:gap-4 ${getSlotStyle(slot)}`}
+          transition={{ delay: i * 0.016, duration: 0.28, ease: "easeOut" }}
+          onClick={() => canClick(slot) && onSlotClick(slot)}
+          tabIndex={canClick(slot) ? 0 : undefined}
+          role={canClick(slot) ? "button" : undefined}
+          onKeyDown={(e) => e.key === "Enter" && canClick(slot) && onSlotClick(slot)}
+          className={`rounded-xl px-4 py-3.5 flex items-center gap-4 ${getClass(slot)}`}
         >
-          {/* Time */}
-          <div className="min-w-[100px] md:min-w-[130px]">
-            <div className="text-white font-bold text-sm">{slot.timeLabel}</div>
-            <div className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md inline-block mt-0.5 ${labelColors[slot.label] || "text-gray-400"}`}>
+          {/* Time + label */}
+          <div className="min-w-[110px] md:min-w-[140px]">
+            <div className="text-white font-semibold text-sm leading-tight">{slot.timeLabel}</div>
+            <span className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-md ${labelStyles[slot.label] || "text-gray-500"}`}>
               {slot.label}
-            </div>
+            </span>
           </div>
 
           {/* Price */}
-          <div className="hidden sm:block flex-1">
-            <span className="text-white font-bold">₹{slot.price}</span>
-            <span className="text-gray-500 text-xs">/hr</span>
+          <div className="hidden sm:flex items-end gap-0.5 flex-1">
+            <span className="text-white font-bold text-base">₹{slot.price}</span>
+            <span className="text-gray-500 text-xs pb-0.5">/hr</span>
           </div>
 
-          {/* Viewers badge */}
+          {/* Viewers */}
           {slot.viewers > 0 && slot.status === "available" && (
-            <div className="hidden md:flex items-center gap-1 text-xs text-orange-400 bg-orange-400/10 border border-orange-400/20 rounded-full px-2 py-0.5">
+            <div className="hidden md:flex items-center gap-1.5 text-[11px] text-orange-400 bg-orange-400/10 border border-orange-400/20 rounded-full px-2.5 py-1">
               <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
               {slot.viewers} viewing
             </div>
           )}
 
-          {/* Peak badge */}
+          {/* Peak tag */}
           {slot.isPeak && slot.status !== "booked" && (
-            <div className="flex-shrink-0 text-[10px] font-black text-yellow-400 bg-yellow-400/10 border border-yellow-400/20 rounded-full px-2 py-0.5">
+            <span className="flex-shrink-0 text-[10px] font-black text-yellow-400 bg-yellow-400/10 border border-yellow-400/25 rounded-full px-2.5 py-1">
               🔥 PEAK
-            </div>
+            </span>
           )}
 
           {/* Status chip */}
           <div className="ml-auto flex-shrink-0">
             {slot.status === "booked" && (
-              <span className="text-xs text-red-400 font-bold bg-red-500/10 border border-red-500/20 rounded-full px-3 py-1">
+              <span className="text-[11px] text-red-400 font-bold bg-red-500/10 border border-red-500/20 rounded-full px-3 py-1">
                 BOOKED
               </span>
             )}
             {slot.status === "just_booked" && (
-              <span className="text-xs text-yellow-400 font-bold bg-yellow-400/10 border border-yellow-400/20 rounded-full px-3 py-1">
+              <span className="text-[11px] text-yellow-400 font-bold bg-yellow-400/10 border border-yellow-400/25 rounded-full px-3 py-1">
                 JUST BOOKED
               </span>
             )}
             {slot.status === "available" && (
-              <span className="text-xs text-[#00FF87] font-bold bg-[#00FF87]/10 border border-[#00FF87]/20 rounded-full px-3 py-1">
+              <span className="text-[11px] text-[#00FF87] font-bold bg-[#00FF87]/10 border border-[#00FF87]/25 rounded-full px-3 py-1">
                 BOOK →
               </span>
             )}

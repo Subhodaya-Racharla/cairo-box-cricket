@@ -10,7 +10,6 @@ const navLinks = [
   { href: "/book", label: "Book Now" },
   { href: "/tournaments", label: "Tournaments" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/admin", label: "Admin" },
 ];
 
 export default function Navbar() {
@@ -19,109 +18,86 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const fn = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  // Don't show on admin page
   if (pathname?.startsWith("/admin")) return null;
 
   return (
-    <nav
-      className={`fixed top-8 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled
-          ? "bg-[#0A0A0A]/95 backdrop-blur-md border-b border-[#2A2A2A] shadow-lg"
-          : "bg-transparent"
-      }`}
-    >
+    <nav className={`fixed top-8 left-0 right-0 z-40 transition-all duration-400 ${
+      scrolled ? "bg-[#0A0A0A]/92 backdrop-blur-xl border-b border-[#1E1E1E] shadow-[0_4px_30px_rgba(0,0,0,0.5)]" : "bg-transparent"
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
+
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-full bg-[#00FF87] flex items-center justify-center shadow-[0_0_15px_rgba(0,255,135,0.5)] group-hover:shadow-[0_0_25px_rgba(0,255,135,0.7)] transition-all">
-              <span className="text-black font-black text-sm">C</span>
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="relative w-9 h-9 rounded-full bg-[#00FF87] flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(0,255,135,0.6)] transition-all duration-300">
+              <span className="text-black font-black text-sm" style={{ fontFamily: "var(--font-bebas), Impact, sans-serif" }}>C</span>
             </div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-[#00FF87] font-black text-xl tracking-widest uppercase" style={{ fontFamily: "Impact, sans-serif" }}>
-                CAIRO
-              </span>
-              <span className="text-gray-400 text-[10px] tracking-wider uppercase -mt-1">Box Cricket</span>
+            <div>
+              <div className="text-[#00FF87] leading-none tracking-[0.2em] text-lg"
+                style={{ fontFamily: "var(--font-bebas), Impact, sans-serif" }}>CAIRO</div>
+              <div className="text-gray-500 text-[9px] tracking-[0.15em] uppercase -mt-0.5">Box Cricket</div>
             </div>
           </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.filter(l => l.href !== "/admin").map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                  pathname === link.href
-                    ? "text-[#00FF87] bg-[#00FF87]/10"
-                    : "text-gray-300 hover:text-white hover:bg-white/5"
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-0.5">
+            {navLinks.map(({ href, label }) => (
+              <Link key={href} href={href}
+                className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                  pathname === href
+                    ? "text-[#00FF87]"
+                    : "text-gray-400 hover:text-white"
                 }`}
               >
-                {link.label}
+                {label}
+                {pathname === href && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-[#00FF87] rounded-full" />
+                )}
               </Link>
             ))}
           </div>
 
-          {/* CTA + Phone */}
-          <div className="hidden md:flex items-center gap-3">
-            <a
-              href={`tel:${businessInfo.phone}`}
-              className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors"
-            >
-              <Phone size={14} />
-              <span>{businessInfo.phoneDisplay}</span>
+          {/* Right side */}
+          <div className="hidden md:flex items-center gap-4">
+            <a href={`tel:${businessInfo.phone}`}
+              className="flex items-center gap-1.5 text-gray-500 hover:text-gray-300 text-xs transition-colors">
+              <Phone size={13} />
+              {businessInfo.phoneDisplay}
             </a>
-            <Link
-              href="/book"
-              className="bg-[#00FF87] hover:bg-[#00e07a] text-black font-bold px-5 py-2 rounded-lg text-sm transition-all duration-200 shadow-[0_0_15px_rgba(0,255,135,0.3)] hover:shadow-[0_0_25px_rgba(0,255,135,0.5)]"
-            >
+            <Link href="/book"
+              className="btn-neon px-5 py-2.5 text-[13px] rounded-xl">
               BOOK NOW
             </Link>
           </div>
 
           {/* Mobile menu button */}
-          <button
-            className="md:hidden p-2 text-gray-300 hover:text-white"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Menu"
-          >
+          <button className="md:hidden p-2 text-gray-400 hover:text-white" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile drawer */}
       {menuOpen && (
-        <div className="md:hidden bg-[#0A0A0A]/98 backdrop-blur-md border-t border-[#2A2A2A]">
-          <div className="px-4 py-3 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMenuOpen(false)}
-                className={`block px-4 py-3 rounded-lg text-sm font-semibold transition-all ${
-                  pathname === link.href
-                    ? "text-[#00FF87] bg-[#00FF87]/10"
-                    : "text-gray-300 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                {link.label}
+        <div className="md:hidden bg-[#0A0A0A]/98 backdrop-blur-xl border-t border-[#1E1E1E] pb-4">
+          <div className="px-4 pt-2 space-y-1">
+            {[...navLinks, { href: "/admin", label: "Admin" }].map(({ href, label }) => (
+              <Link key={href} href={href} onClick={() => setMenuOpen(false)}
+                className={`flex items-center px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
+                  pathname === href ? "text-[#00FF87] bg-[#00FF87]/8" : "text-gray-400 hover:text-white hover:bg-white/4"
+                }`}>
+                {label}
               </Link>
             ))}
-            <div className="pt-2 pb-1">
-              <Link
-                href="/book"
-                onClick={() => setMenuOpen(false)}
-                className="block w-full bg-[#00FF87] text-black font-bold px-4 py-3 rounded-lg text-sm text-center"
-              >
-                BOOK NOW
-              </Link>
-            </div>
+            <Link href="/book" onClick={() => setMenuOpen(false)}
+              className="block btn-neon text-center px-4 py-3.5 mt-2 rounded-xl text-sm">
+              BOOK NOW
+            </Link>
           </div>
         </div>
       )}

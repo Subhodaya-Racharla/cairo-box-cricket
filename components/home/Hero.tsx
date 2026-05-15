@@ -1,117 +1,125 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Play, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      {/* Background image */}
+      {/* --- Background stack --- */}
+      {/* 1. Photo */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage:
-            "url(https://images.unsplash.com/photo-1624880357913-a8539238245b?w=1600&q=80)",
-        }}
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
+        style={{ backgroundImage: "url(https://images.unsplash.com/photo-1624880357913-a8539238245b?w=1600&q=85)" }}
       />
-      {/* Overlays */}
-      <div className="absolute inset-0 bg-black/70" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#0A0A0A]" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
+      {/* 2. Dark overlay */}
+      <div className="absolute inset-0 bg-black/65" />
+      {/* 3. Gradient vignette */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/10 to-[#0A0A0A]" />
+      {/* 4. Subtle green glow from bottom-left */}
+      <div className="absolute bottom-0 left-0 w-[600px] h-[400px] rounded-full bg-[#00FF87]/8 blur-[120px] pointer-events-none" />
+      {/* 5. Subtle blue glow from top-right */}
+      <div className="absolute top-0 right-0 w-[500px] h-[400px] rounded-full bg-[#00B4FF]/6 blur-[140px] pointer-events-none" />
 
-      {/* Live indicator */}
+      {/* --- Live indicator pill --- */}
       <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1.2 }}
-        className="absolute top-24 right-4 md:top-28 md:right-8 flex items-center gap-2 bg-black/60 backdrop-blur-md border border-red-500/30 rounded-full px-3 py-1.5"
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.1, duration: 0.5 }}
+        className="absolute top-24 right-4 md:top-28 md:right-8 flex items-center gap-2 bg-black/50 backdrop-blur-md border border-red-500/25 rounded-full px-3 py-1.5"
       >
         <span className="live-dot" />
-        <span className="text-red-400 text-xs font-bold tracking-wider">LIVE</span>
-        <span className="text-white text-xs">2 matches in progress</span>
+        <span className="text-red-400 text-[11px] font-bold tracking-widest">LIVE</span>
+        <span className="text-gray-300 text-[11px]">2 matches now</span>
       </motion.div>
 
-      {/* Main content */}
+      {/* --- Main content --- */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+
+        {/* Eyebrow badge */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mb-7"
         >
-          <span className="inline-block bg-[#00FF87]/10 border border-[#00FF87]/30 text-[#00FF87] text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6">
-            🏏 Uppal, Hyderabad · Open 24/7
+          <span className="inline-flex items-center gap-2 border border-[#00FF87]/30 bg-[#00FF87]/8 text-[#00FF87] text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2 rounded-full backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00FF87] animate-pulse" />
+            Uppal, Hyderabad · Open 24 hours
           </span>
         </motion.div>
 
-        <motion.h1
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase leading-none tracking-tight mb-6"
-          style={{ fontFamily: "Impact, sans-serif" }}
-          initial={{ opacity: 0, y: 40 }}
+        {/* Headline */}
+        <motion.div
+          initial={{ opacity: 0, y: 36 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.35 }}
+          transition={{ duration: 0.65, delay: 0.35 }}
         >
-          <span className="block text-white">HYDERABAD'S</span>
-          <span className="block gradient-text-green">PREMIUM</span>
-          <span className="block text-white">BOX CRICKET ARENA</span>
-        </motion.h1>
+          <h1 className="text-[clamp(3rem,10vw,7rem)] leading-none tracking-wide text-white mb-6"
+            style={{ fontFamily: "var(--font-bebas), Impact, sans-serif" }}>
+            <span className="block">HYDERABAD'S</span>
+            <span className="block text-gradient-green" style={{ lineHeight: 1.05 }}>PREMIUM</span>
+            <span className="block">BOX CRICKET ARENA</span>
+          </h1>
+        </motion.div>
 
+        {/* Subtitle */}
         <motion.p
-          className="text-gray-300 text-lg md:text-xl mb-10 max-w-xl mx-auto"
+          className="text-gray-300 text-lg md:text-xl mb-10 max-w-lg mx-auto leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.55 }}
+          transition={{ duration: 0.55, delay: 0.55 }}
         >
-          Book your slot in{" "}
-          <span className="text-[#00FF87] font-bold">30 seconds.</span>{" "}
-          Open 24/7. From ₹600/hr.
+          Book your slot in <span className="text-[#00FF87] font-bold">30 seconds.</span>{" "}
+          Floodlit nights, premium turf, zero hassle.
         </motion.p>
 
+        {/* CTAs */}
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
+          transition={{ duration: 0.55, delay: 0.7 }}
         >
-          <Link
-            href="/book"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#00FF87] hover:bg-[#00e07a] text-black font-black px-8 py-4 rounded-xl text-base uppercase tracking-wider transition-all duration-200 shadow-[0_0_30px_rgba(0,255,135,0.4)] hover:shadow-[0_0_50px_rgba(0,255,135,0.6)]"
-          >
-            BOOK NOW
-            <span className="bg-black/20 rounded-full px-2 py-0.5 text-xs font-bold">FREE</span>
+          <Link href="/book" className="btn-neon w-full sm:w-auto inline-flex items-center justify-center gap-3 px-9 py-4 text-[15px]">
+            🏏 BOOK NOW — FREE
           </Link>
-          <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-white/30 hover:border-white/60 text-white font-bold px-8 py-4 rounded-xl text-base uppercase tracking-wider transition-all duration-200 hover:bg-white/5 backdrop-blur-sm">
-            <Play size={16} className="fill-white" />
-            WATCH TOUR
+          <button className="btn-outline w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-[15px] backdrop-blur-sm">
+            ▶ &nbsp;WATCH TOUR
           </button>
         </motion.div>
 
-        {/* Trust badges */}
+        {/* Trust row */}
         <motion.div
-          className="flex items-center justify-center gap-6 mt-12 flex-wrap"
+          className="mt-14 flex items-center justify-center gap-8 flex-wrap"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          transition={{ delay: 1.0 }}
         >
           {[
-            { label: "326+ Reviews", val: "⭐ 3.9" },
-            { label: "Open Always", val: "🕐 24/7" },
-            { label: "From Only", val: "₹600/hr" },
-          ].map(({ label, val }) => (
-            <div key={label} className="text-center">
-              <div className="text-white font-bold text-sm">{val}</div>
-              <div className="text-gray-500 text-xs">{label}</div>
+            { icon: "⭐", val: "3.9/5", sub: "326 Reviews" },
+            { icon: "🕐", val: "24/7", sub: "Always Open" },
+            { icon: "💰", val: "₹600", sub: "Starting price/hr" },
+          ].map(({ icon, val, sub }) => (
+            <div key={val} className="flex items-center gap-2.5">
+              <span className="text-xl">{icon}</span>
+              <div>
+                <div className="text-white font-bold text-sm leading-tight">{val}</div>
+                <div className="text-gray-500 text-[11px]">{sub}</div>
+              </div>
             </div>
           ))}
         </motion.div>
       </div>
 
-      {/* Scroll arrow */}
+      {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-gray-500"
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-gray-500"
+        animate={{ y: [0, 7, 0] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
       >
-        <ChevronDown size={28} />
+        <span className="text-[10px] tracking-widest uppercase">Scroll</span>
+        <ChevronDown size={18} />
       </motion.div>
     </section>
   );
