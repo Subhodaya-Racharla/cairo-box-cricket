@@ -5,17 +5,17 @@ import { useState, useEffect } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { businessInfo } from "@/lib/data";
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/book", label: "Book Now" },
+const links = [
+  { href: "/",            label: "Home" },
+  { href: "/book",        label: "Book Now" },
   { href: "/tournaments", label: "Tournaments" },
-  { href: "/gallery", label: "Gallery" },
+  { href: "/gallery",     label: "Gallery" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 50);
@@ -25,80 +25,86 @@ export default function Navbar() {
 
   if (pathname?.startsWith("/admin")) return null;
 
+  const navBg = scrolled
+    ? "rgba(8,8,10,.94)"
+    : "transparent";
+  const navBorder = scrolled ? "1px solid #1A1D26" : "1px solid transparent";
+
   return (
-    <nav className={`fixed top-8 left-0 right-0 z-40 transition-all duration-400 ${
-      scrolled ? "bg-[#0A0A0A]/92 backdrop-blur-xl border-b border-[#1E1E1E] shadow-[0_4px_30px_rgba(0,0,0,0.5)]" : "bg-transparent"
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <nav style={{
+      position: "fixed", top: 32, left: 0, right: 0, zIndex: 40,
+      background: navBg, backdropFilter: scrolled ? "blur(20px)" : "none",
+      borderBottom: navBorder,
+      transition: "background .3s, border-color .3s",
+      boxShadow: scrolled ? "0 4px 30px rgba(0,0,0,.5)" : "none",
+    }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="relative w-9 h-9 rounded-full bg-[#00FF87] flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(0,255,135,0.6)] transition-all duration-300">
-              <span className="text-black font-black text-sm" style={{ fontFamily: "var(--font-bebas), Impact, sans-serif" }}>C</span>
-            </div>
-            <div>
-              <div className="text-[#00FF87] leading-none tracking-[0.2em] text-lg"
-                style={{ fontFamily: "var(--font-bebas), Impact, sans-serif" }}>CAIRO</div>
-              <div className="text-gray-500 text-[9px] tracking-[0.15em] uppercase -mt-0.5">Box Cricket</div>
-            </div>
-          </Link>
+        {/* Logo */}
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: "50%",
+            background: "#00FF87", display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 0 18px rgba(0,255,135,.5)",
+          }}>
+            <span style={{ fontFamily: "var(--font-bebas), Impact, sans-serif", color: "#000", fontSize: 18, lineHeight: 1 }}>C</span>
+          </div>
+          <div>
+            <div style={{ fontFamily: "var(--font-bebas), Impact, sans-serif", color: "#00FF87", fontSize: 20, letterSpacing: ".2em", lineHeight: 1 }}>CAIRO</div>
+            <div style={{ color: "#555", fontSize: 9, letterSpacing: ".14em", textTransform: "uppercase", marginTop: 1 }}>Box Cricket</div>
+          </div>
+        </Link>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-0.5">
-            {navLinks.map(({ href, label }) => (
-              <Link key={href} href={href}
-                className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                  pathname === href
-                    ? "text-[#00FF87]"
-                    : "text-gray-400 hover:text-white"
-                }`}
-              >
+        {/* Desktop links */}
+        <div style={{ display: "none", gap: 4 }} className="md:flex">
+          {links.map(({ href, label }) => {
+            const active = pathname === href;
+            return (
+              <Link key={href} href={href} style={{
+                padding: "8px 16px", borderRadius: 10,
+                fontSize: 14, fontWeight: 600, textDecoration: "none",
+                color: active ? "#00FF87" : "#999",
+                background: active ? "rgba(0,255,135,.08)" : "transparent",
+                transition: "color .18s, background .18s",
+                position: "relative",
+              }}>
                 {label}
-                {pathname === href && (
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-[#00FF87] rounded-full" />
-                )}
               </Link>
-            ))}
-          </div>
-
-          {/* Right side */}
-          <div className="hidden md:flex items-center gap-4">
-            <a href={`tel:${businessInfo.phone}`}
-              className="flex items-center gap-1.5 text-gray-500 hover:text-gray-300 text-xs transition-colors">
-              <Phone size={13} />
-              {businessInfo.phoneDisplay}
-            </a>
-            <Link href="/book"
-              className="btn-neon px-5 py-2.5 text-[13px] rounded-xl">
-              BOOK NOW
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
-          <button className="md:hidden p-2 text-gray-400 hover:text-white" onClick={() => setMenuOpen(!menuOpen)}>
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+            );
+          })}
         </div>
+
+        {/* Right side */}
+        <div style={{ display: "none", alignItems: "center", gap: 16 }} className="md:flex">
+          <a href={`tel:${businessInfo.phone}`} style={{ display: "flex", alignItems: "center", gap: 6, color: "#666", fontSize: 12, textDecoration: "none" }}>
+            <Phone size={13} style={{ color: "#555" }} />
+            {businessInfo.phoneDisplay}
+          </a>
+          <Link href="/book" className="btn-neon" style={{ padding: "10px 22px", fontSize: 12 }}>
+            BOOK NOW
+          </Link>
+        </div>
+
+        {/* Mobile hamburger */}
+        <button onClick={() => setOpen(!open)} style={{ display: "flex", background: "none", border: "none", color: "#999", cursor: "pointer", padding: 8 }} className="md:hidden">
+          {open ? <X size={22} /> : <Menu size={22} />}
+        </button>
       </div>
 
       {/* Mobile drawer */}
-      {menuOpen && (
-        <div className="md:hidden bg-[#0A0A0A]/98 backdrop-blur-xl border-t border-[#1E1E1E] pb-4">
-          <div className="px-4 pt-2 space-y-1">
-            {[...navLinks, { href: "/admin", label: "Admin" }].map(({ href, label }) => (
-              <Link key={href} href={href} onClick={() => setMenuOpen(false)}
-                className={`flex items-center px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                  pathname === href ? "text-[#00FF87] bg-[#00FF87]/8" : "text-gray-400 hover:text-white hover:bg-white/4"
-                }`}>
-                {label}
-              </Link>
-            ))}
-            <Link href="/book" onClick={() => setMenuOpen(false)}
-              className="block btn-neon text-center px-4 py-3.5 mt-2 rounded-xl text-sm">
-              BOOK NOW
-            </Link>
-          </div>
+      {open && (
+        <div style={{ background: "rgba(8,8,10,.98)", backdropFilter: "blur(20px)", borderTop: "1px solid #1A1D26", padding: "12px 16px 16px" }}>
+          {[...links, { href: "/admin", label: "Admin" }].map(({ href, label }) => (
+            <Link key={href} href={href} onClick={() => setOpen(false)} style={{
+              display: "block", padding: "12px 16px", borderRadius: 12,
+              color: pathname === href ? "#00FF87" : "#aaa",
+              background: pathname === href ? "rgba(0,255,135,.08)" : "transparent",
+              fontSize: 15, fontWeight: 600, textDecoration: "none", marginBottom: 2,
+            }}>{label}</Link>
+          ))}
+          <Link href="/book" onClick={() => setOpen(false)} className="btn-neon" style={{ display: "block", textAlign: "center", marginTop: 8, padding: "14px" }}>
+            BOOK NOW
+          </Link>
         </div>
       )}
     </nav>

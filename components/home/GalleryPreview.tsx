@@ -5,66 +5,75 @@ import Link from "next/link";
 import Image from "next/image";
 import { galleryImages } from "@/lib/data";
 
+// Use only images that are known to load well
+const preview = [
+  galleryImages[0],  // tournaments
+  galleryImages[3],  // day matches
+  galleryImages[4],  // night
+  galleryImages[6],  // day
+  galleryImages[7],  // ground
+  galleryImages[9],  // night
+];
+
 export default function GalleryPreview() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const preview = galleryImages.slice(0, 6);
 
   return (
-    <section ref={ref} className="py-16 md:py-24 px-4 bg-[#0D0D0D]">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-        >
+    <section ref={ref} style={{ padding: "80px 16px", background: "#0D0F14" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 16, marginBottom: 36 }}>
           <div>
-            <span className="text-[#00FF87] text-xs font-bold tracking-widest uppercase">Photo Gallery</span>
-            <h2 className="text-4xl md:text-5xl font-black text-white mt-1 uppercase" style={{ fontFamily: "Impact, sans-serif" }}>
+            <span className="section-label">Photo Gallery</span>
+            <h2 style={{ fontFamily: "var(--font-bebas), Impact, sans-serif", fontSize: "clamp(2.8rem,6vw,4rem)", color: "#fff", display: "block", lineHeight: 1 }}>
               FEEL THE VIBE
             </h2>
           </div>
-          <Link href="/gallery" className="text-[#00FF87] font-bold text-sm hover:underline shrink-0">
+          <Link href="/gallery" style={{ color: "#00FF87", fontWeight: 700, fontSize: 13, letterSpacing: ".05em", textDecoration: "none" }}>
             View All Photos →
           </Link>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {/* 3-column grid — fixed heights, no broken aspect-ratio tricks */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
           {preview.map((img, i) => (
-            <motion.div
-              key={img.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={inView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: i * 0.1, duration: 0.4 }}
-              className="relative overflow-hidden rounded-xl bg-[#1A1A1A] group cursor-pointer"
-              style={{ aspectRatio: i % 3 === 1 ? "1/1.2" : "1/1" }}
+            <motion.div key={img.id}
+              initial={{ opacity: 0, scale: .96 }} animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ delay: i * 0.08 }}
+              style={{ position: "relative", overflow: "hidden", borderRadius: 16, cursor: "pointer",
+                height: i === 0 || i === 5 ? 280 : 220,    // first & last taller
+                background: "#1A1D26"
+              }}
+              whileHover={{ scale: 1.02 }}
             >
               <Image
-                src={img.url}
-                alt={img.caption}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-                sizes="(max-width: 768px) 50vw, 33vw"
+                src={img.url} alt={img.caption} fill
+                style={{ objectFit: "cover", transition: "transform .4s ease" }}
+                sizes="(max-width:768px) 50vw, 33vw"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-end p-3">
-                <p className="text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 leading-tight">
-                  {img.caption}
-                </p>
-              </div>
+              {/* Hover overlay */}
+              <motion.div
+                initial={{ opacity: 0 }} whileHover={{ opacity: 1 }}
+                style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,.5)", display: "flex", alignItems: "flex-end", padding: 14 }}
+              >
+                <span style={{ color: "#fff", fontSize: 12, fontWeight: 600, lineHeight: 1.4 }}>{img.caption}</span>
+              </motion.div>
             </motion.div>
           ))}
         </div>
 
-        <motion.div
-          className="text-center mt-8"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.6 }}
-        >
-          <Link
-            href="/gallery"
-            className="inline-block border border-[#2A2A2A] hover:border-[#00FF87]/50 text-gray-300 hover:text-white font-semibold px-8 py-3 rounded-xl text-sm transition-all"
-          >
+        <motion.div initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: .5 }}
+          style={{ textAlign: "center", marginTop: 28 }}>
+          <Link href="/gallery" style={{
+            display: "inline-block",
+            border: "1px solid #2A2D38", color: "#ccc",
+            padding: "12px 32px", borderRadius: 12,
+            fontWeight: 600, fontSize: 13, textDecoration: "none",
+            transition: "border-color .2s, color .2s",
+          }}>
             See All 15+ Photos
           </Link>
         </motion.div>

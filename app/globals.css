@@ -1,289 +1,217 @@
 @import "tailwindcss";
 
-/* =====================================================
-   CAIRO BOX CRICKET — GLOBAL STYLES
-   Tailwind v4 CSS-first configuration
-   ===================================================== */
+/* ─── CAIRO BOX CRICKET — GLOBAL STYLES (Tailwind v4) ─── */
 
+/* Font variables exposed by next/font */
 @theme {
-  --color-neon: #00FF87;
-  --color-neon-dim: #00cc6a;
-  --color-blue: #00B4FF;
-  --color-gold: #FFB800;
-  --color-base: #0A0A0A;
-  --color-card: #111111;
-  --color-card2: #1A1A1A;
-  --color-border: #222222;
-  --color-border2: #2A2A2A;
-
   --font-display: var(--font-bebas), "Impact", "Arial Narrow", sans-serif;
-  --font-body: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
-
-  --radius-xl: 16px;
-  --radius-2xl: 20px;
+  --font-body:    var(--font-inter), "Helvetica Neue", Arial, sans-serif;
 }
 
-/* =====================================================
-   BASE RESET & BODY
-   ===================================================== */
+/* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; }
 
 body {
-  background-color: #0A0A0A;
-  color: #ffffff;
-  font-family: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  background: #08080A;
+  color: #fff;
+  font-family: var(--font-inter), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
 }
 
-/* All headings use Bebas Neue */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-bebas), "Impact", "Arial Narrow", sans-serif;
-  letter-spacing: 0.02em;
+/* Bebas Neue on all headings */
+h1, h2, h3 {
+  font-family: var(--font-bebas), Impact, sans-serif;
+  letter-spacing: 0.03em;
 }
 
-/* =====================================================
-   CUSTOM SCROLLBAR
-   ===================================================== */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: #111; }
-::-webkit-scrollbar-thumb { background: #00FF87; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #00cc6a; }
+::-webkit-scrollbar-thumb { background: #00FF87; border-radius: 4px; }
 
-/* =====================================================
-   FOCUS RING
-   ===================================================== */
+/* ── FOCUS ── */
 :focus-visible { outline: 2px solid #00FF87; outline-offset: 3px; border-radius: 4px; }
-button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
 
-/* =====================================================
-   NEON GLOW UTILITIES
-   ===================================================== */
-.glow-green {
-  box-shadow: 0 0 12px rgba(0,255,135,0.5), 0 0 30px rgba(0,255,135,0.2);
-}
-.glow-green-sm { box-shadow: 0 0 8px rgba(0,255,135,0.4); }
-.glow-blue { box-shadow: 0 0 12px rgba(0,180,255,0.5), 0 0 30px rgba(0,180,255,0.2); }
-.glow-gold { box-shadow: 0 0 12px rgba(255,184,0,0.5), 0 0 30px rgba(255,184,0,0.2); }
-
-/* =====================================================
-   GRADIENT TEXT
-   ===================================================== */
-.text-gradient-green {
-  background: linear-gradient(135deg, #00FF87 0%, #00d4ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.text-gradient-gold {
-  background: linear-gradient(135deg, #FFB800 0%, #ff6b00 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.text-gradient-white {
-  background: linear-gradient(135deg, #ffffff 0%, #aaaaaa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* =====================================================
-   LIVE PULSE DOT
-   ===================================================== */
-.live-dot {
-  display: inline-block;
-  width: 8px; height: 8px;
-  background: #ff3b3b;
-  border-radius: 50%;
-  animation: livePulse 1.6s ease-in-out infinite;
-}
-@keyframes livePulse {
-  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(255,59,59,0.5); }
-  50% { opacity: 0.7; transform: scale(1.2); box-shadow: 0 0 0 4px rgba(255,59,59,0); }
-}
-
-/* =====================================================
-   GLASS CARD
-   ===================================================== */
-.glass {
-  background: rgba(255,255,255,0.03);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255,255,255,0.06);
-}
-
-/* =====================================================
-   CARD HOVER LIFT
-   ===================================================== */
-.card-lift {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  will-change: transform;
-}
-.card-lift:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-}
-
-/* =====================================================
-   SHIMMER SKELETON
-   ===================================================== */
-.shimmer {
-  background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
-  background-size: 400px 100%;
-  animation: shimmerMove 1.4s infinite;
-}
-@keyframes shimmerMove {
-  0% { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-}
-
-/* =====================================================
-   SLOT CARDS
-   ===================================================== */
-.slot-available {
-  border: 1.5px solid rgba(0,255,135,0.3);
-  background: rgba(0,255,135,0.04);
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-.slot-available:hover {
-  border-color: #00FF87;
-  background: rgba(0,255,135,0.09);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(0,255,135,0.2);
-}
-.slot-peak {
-  border: 1.5px solid rgba(255,184,0,0.4);
-  background: rgba(255,184,0,0.05);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.slot-peak:hover {
-  border-color: #FFB800;
-  background: rgba(255,184,0,0.1);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(255,184,0,0.2);
-}
-.slot-booked {
-  border: 1.5px solid rgba(255,70,70,0.2);
-  background: rgba(255,70,70,0.04);
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-.slot-live {
-  border: 1.5px solid rgba(255,184,0,0.7);
-  background: rgba(255,184,0,0.08);
-  animation: slotLivePulse 2s ease-in-out infinite;
-}
-@keyframes slotLivePulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(255,184,0,0.2); }
-  50% { box-shadow: 0 0 20px rgba(255,184,0,0.4); }
-}
-
-/* =====================================================
-   RECHARTS OVERRIDES
-   ===================================================== */
-.recharts-cartesian-grid line { stroke: #222 !important; }
-.recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line { stroke: #222 !important; }
-.recharts-tooltip-wrapper { outline: none !important; }
-svg text { fill: #666 !important; font-size: 11px !important; font-family: var(--font-inter) !important; }
-
-/* =====================================================
-   SCROLLBAR HIDE UTILITY
-   ===================================================== */
+/* ── SCROLLBAR HIDE ── */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* =====================================================
-   GRADIENT BACKGROUNDS (section accents)
-   ===================================================== */
-.bg-glow-green { background: radial-gradient(ellipse at center, rgba(0,255,135,0.08) 0%, transparent 65%); }
-.bg-glow-blue  { background: radial-gradient(ellipse at center, rgba(0,180,255,0.08) 0%, transparent 65%); }
-.bg-glow-gold  { background: radial-gradient(ellipse at center, rgba(255,184,0,0.08) 0%, transparent 65%); }
-
-/* =====================================================
-   NOISE TEXTURE (adds depth to dark backgrounds)
-   ===================================================== */
-.noise::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
+/* ── GRADIENT TEXT ── */
+.text-neon {
+  background: linear-gradient(130deg, #00FF87 20%, #00d4ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gold {
+  background: linear-gradient(130deg, #FFB800 20%, #ff7700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* =====================================================
-   SAFE AREA (mobile bottom nav)
-   ===================================================== */
-.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
-
-/* =====================================================
-   GRADIENT BORDER CARD
-   ===================================================== */
-.border-gradient-green {
-  position: relative;
-  background: #1A1A1A;
-  border-radius: 16px;
+/* ── LIVE DOT ── */
+.live-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: #ff3535;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: ldPulse 1.5s ease-in-out infinite;
 }
-.border-gradient-green::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(0,255,135,0.4), rgba(0,180,255,0.1), rgba(0,255,135,0.05));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+@keyframes ldPulse {
+  0%,100% { opacity:1; transform:scale(1); box-shadow:0 0 0 0 rgba(255,53,53,.5); }
+  60%     { opacity:.7; transform:scale(1.15); box-shadow:0 0 0 5px rgba(255,53,53,0); }
 }
 
-/* =====================================================
-   NEON BUTTON
-   ===================================================== */
+/* ── SECTION LABEL ── */
+.section-label {
+  display: inline-block;
+  color: #00FF87;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* ── NEON BUTTON ── */
 .btn-neon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: #00FF87;
   color: #000;
+  font-family: var(--font-inter), sans-serif;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  font-size: 13px;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  border-radius: 12px;
-  transition: all 0.2s ease;
-  box-shadow: 0 0 20px rgba(0,255,135,0.3), 0 4px 16px rgba(0,0,0,0.4);
+  border-radius: 14px;
+  padding: 14px 28px;
+  transition: background .18s, box-shadow .18s, transform .18s;
+  box-shadow: 0 0 24px rgba(0,255,135,.35), 0 4px 14px rgba(0,0,0,.4);
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
 }
 .btn-neon:hover {
-  background: #00e07a;
-  box-shadow: 0 0 35px rgba(0,255,135,0.5), 0 8px 24px rgba(0,0,0,0.4);
+  background: #00e87a;
+  box-shadow: 0 0 40px rgba(0,255,135,.55), 0 6px 20px rgba(0,0,0,.4);
   transform: translateY(-2px);
 }
 .btn-neon:active { transform: translateY(0); }
 
-.btn-outline {
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
-  border: 1.5px solid rgba(255,255,255,0.2);
   color: #fff;
+  font-family: var(--font-inter), sans-serif;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  font-size: 13px;
+  letter-spacing: .08em;
   text-transform: uppercase;
-  border-radius: 12px;
-  transition: all 0.2s ease;
+  border-radius: 14px;
+  padding: 13px 28px;
+  border: 1.5px solid rgba(255,255,255,.22);
+  transition: border-color .18s, background .18s;
+  cursor: pointer;
+  white-space: nowrap;
 }
-.btn-outline:hover {
-  border-color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.05);
+.btn-ghost:hover { border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.06); }
+
+/* ── CARD ── */
+.card {
+  background: #111318;
+  border: 1px solid #1E2028;
+  border-radius: 20px;
+  overflow: visible; /* never clip text */
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+.card:hover {
+  border-color: #2A2D38;
+  transform: translateY(-4px);
+  box-shadow: 0 20px 48px rgba(0,0,0,.5);
 }
 
-/* =====================================================
-   CONFETTI ANIMATION
-   ===================================================== */
+/* ── GLASS CARD ── */
+.card-glass {
+  background: rgba(255,255,255,.025);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 20px;
+}
+
+/* ── SHIMMER ── */
+.shimmer {
+  background: linear-gradient(90deg,#1a1a1a 0%,#262626 50%,#1a1a1a 100%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer {
+  0%  { background-position: -400px 0; }
+  100%{ background-position:  400px 0; }
+}
+
+/* ── SLOT CARDS ── */
+.slot-avail {
+  border: 1.5px solid rgba(0,255,135,.28);
+  background: rgba(0,255,135,.04);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color .18s, background .18s, transform .18s, box-shadow .18s;
+}
+.slot-avail:hover {
+  border-color: #00FF87;
+  background: rgba(0,255,135,.09);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,255,135,.18);
+}
+.slot-peak {
+  border: 1.5px solid rgba(255,184,0,.35);
+  background: rgba(255,184,0,.05);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color .18s, background .18s, transform .18s, box-shadow .18s;
+}
+.slot-peak:hover {
+  border-color: #FFB800;
+  background: rgba(255,184,0,.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255,184,0,.18);
+}
+.slot-booked {
+  border: 1.5px solid rgba(255,60,60,.18);
+  background: rgba(255,60,60,.03);
+  border-radius: 14px;
+  opacity: .5;
+  cursor: not-allowed;
+}
+.slot-live {
+  border: 1.5px solid rgba(255,184,0,.6);
+  background: rgba(255,184,0,.07);
+  border-radius: 14px;
+  animation: liveSl 2s ease-in-out infinite;
+}
+@keyframes liveSl {
+  0%,100%{ box-shadow:0 0 8px rgba(255,184,0,.15); }
+  50%    { box-shadow:0 0 22px rgba(255,184,0,.35); }
+}
+
+/* ── RECHARTS ── */
+.recharts-cartesian-grid line { stroke: #1E2028 !important; }
+svg text { fill: #555 !important; font-size: 11px !important; }
+
+/* ── SAFE AREA ── */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* ── CONFETTI ── */
 @keyframes confettiFall {
-  0%   { transform: translateY(-40px) rotate(0deg) scale(1); opacity: 1; }
-  80%  { opacity: 1; }
-  100% { transform: translateY(90vh) rotate(900deg) scale(0.5); opacity: 0; }
+  0%  { transform: translateY(-40px) rotate(0deg); opacity: 1; }
+  100%{ transform: translateY(90vh) rotate(900deg); opacity: 0; }
 }

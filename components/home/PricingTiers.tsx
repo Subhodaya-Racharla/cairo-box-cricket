@@ -2,100 +2,100 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
-import { Check, Sun, Calendar, Zap } from "lucide-react";
+import { Check } from "lucide-react";
 import { pricingTiers } from "@/lib/data";
 
-const iconMap: Record<string, React.ElementType> = { sun: Sun, calendar: Calendar, zap: Zap };
+const tierAccent = ["#00B4FF", "#00FF87", "#FFB800"];
+const tierBg    = ["rgba(0,180,255,.06)", "rgba(0,255,135,.06)", "rgba(255,184,0,.06)"];
+const tierBdr   = ["rgba(0,180,255,.25)", "rgba(0,255,135,.4)",  "rgba(255,184,0,.35)"];
 
 export default function PricingTiers() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="py-20 md:py-28 px-4 bg-[#0D0D0D] relative overflow-hidden">
-      {/* Ambient glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-[#00FF87]/4 blur-[120px] rounded-full pointer-events-none" />
+    <section ref={ref} style={{ padding: "80px 16px", position: "relative", overflow: "hidden", background: "#0D0F14" }}>
+      {/* Ambient glow */}
+      <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 700, height: 280, borderRadius: "50%", background: "rgba(0,255,135,.04)", filter: "blur(80px)", pointerEvents: "none" }} />
 
-      <div className="max-w-5xl mx-auto relative z-10">
-        <motion.div
-          className="text-center mb-14"
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-        >
-          <p className="text-[#00FF87] text-[11px] font-bold tracking-[0.25em] uppercase mb-3">Transparent Pricing</p>
-          <h2 className="text-5xl md:text-6xl text-white" style={{ fontFamily: "var(--font-bebas), Impact, sans-serif" }}>
+      <div style={{ maxWidth: 1000, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          style={{ textAlign: "center", marginBottom: 56 }}>
+          <span className="section-label">Transparent Pricing</span>
+          <h2 style={{ fontFamily: "var(--font-bebas), Impact, sans-serif", fontSize: "clamp(2.8rem,6vw,4.5rem)", color: "#fff", display: "block", lineHeight: 1 }}>
             SIMPLE PRICING
           </h2>
-          <p className="text-gray-400 mt-4 text-sm">No hidden charges. Pay exactly what you see.</p>
+          <p style={{ color: "#888", marginTop: 12, fontSize: 14 }}>No hidden charges. Pay exactly what you see.</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
           {pricingTiers.map((tier, i) => {
-            const Icon = iconMap[tier.icon] || Zap;
+            const accent = tierAccent[i];
+            const bg     = tierBg[i];
+            const bdr    = tierBdr[i];
             return (
-              <motion.div
-                key={tier.id}
-                initial={{ opacity: 0, y: 36 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: i * 0.12, duration: 0.5 }}
-                className={`relative rounded-2xl p-7 flex flex-col overflow-hidden ${
-                  tier.popular
-                    ? "bg-gradient-to-b from-[#00FF87]/10 to-[#111111] border-2 border-[#00FF87] shadow-[0_0_60px_rgba(0,255,135,0.12)]"
-                    : "bg-[#111111] border border-[#222222]"
-                }`}
+              <motion.div key={tier.id}
+                initial={{ opacity: 0, y: 36 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: i * 0.12 }}
+                style={{
+                  position: "relative",
+                  background: tier.popular ? `linear-gradient(160deg, ${bg} 0%, #111318 60%)` : "#111318",
+                  border: `${tier.popular ? "2px" : "1px"} solid ${tier.popular ? bdr : "#1E2028"}`,
+                  borderRadius: 22,
+                  padding: "32px 28px",
+                  display: "flex", flexDirection: "column",
+                  boxShadow: tier.popular ? `0 0 60px ${bg}` : "none",
+                }}
               >
+                {/* Popular badge */}
                 {tier.popular && (
-                  <>
-                    {/* Glow top-edge */}
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00FF87] to-transparent" />
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
-                      <span className="bg-[#00FF87] text-black text-[10px] font-black px-5 py-1.5 rounded-full uppercase tracking-[0.18em] shadow-[0_4px_20px_rgba(0,255,135,0.4)]">
-                        MOST POPULAR
-                      </span>
-                    </div>
-                  </>
+                  <div style={{ position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)", zIndex: 2 }}>
+                    <span style={{
+                      background: accent, color: "#000",
+                      fontSize: 10, fontWeight: 900,
+                      padding: "5px 18px", borderRadius: 999,
+                      letterSpacing: ".18em", textTransform: "uppercase",
+                      boxShadow: `0 4px 20px rgba(0,255,135,.45)`,
+                      whiteSpace: "nowrap",
+                    }}>MOST POPULAR</span>
+                  </div>
                 )}
 
-                <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${
-                  tier.popular ? "bg-[#00FF87]/15 text-[#00FF87]" : "bg-[#1E1E1E] text-gray-400"
-                }`}>
-                  <Icon size={20} />
+                {/* Top color accent bar */}
+                <div style={{ height: 3, borderRadius: 4, background: `linear-gradient(90deg, ${accent}, transparent)`, marginBottom: 24 }} />
+
+                <div style={{ marginBottom: 6 }}>
+                  <h3 style={{ color: "#fff", fontWeight: 700, fontSize: 18, marginBottom: 4 }}>{tier.name}</h3>
+                  <p style={{ color: "#666", fontSize: 12 }}>{tier.hours}</p>
                 </div>
 
-                <h3 className="text-white font-bold text-lg mb-1">{tier.name}</h3>
-                <p className="text-gray-500 text-xs mb-6 leading-relaxed">{tier.hours}</p>
-
-                <div className="mb-7 flex items-end gap-1">
-                  <span
-                    className={`text-5xl leading-none font-normal ${tier.popular ? "text-[#00FF87]" : "text-white"}`}
-                    style={{ fontFamily: "var(--font-bebas), Impact, sans-serif" }}
-                  >
-                    ₹{tier.price}
-                  </span>
-                  <span className="text-gray-500 text-sm pb-1">/hr</span>
+                <div style={{ margin: "24px 0", display: "flex", alignItems: "flex-end", gap: 4 }}>
+                  <span style={{ fontFamily: "var(--font-bebas), Impact, sans-serif", fontSize: 58, lineHeight: 1, color: accent }}>₹{tier.price}</span>
+                  <span style={{ color: "#666", fontSize: 13, paddingBottom: 8 }}>/hr</span>
                 </div>
 
-                <ul className="space-y-2.5 mb-8 flex-1">
+                <ul style={{ marginBottom: 28, flex: 1, display: "flex", flexDirection: "column", gap: 10 }}>
                   {tier.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-sm text-gray-300">
-                      <span className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
-                        tier.popular ? "bg-[#00FF87]/15 text-[#00FF87]" : "bg-[#2A2A2A] text-gray-500"
-                      }`}>
-                        <Check size={10} />
+                    <li key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: "#ccc" }}>
+                      <span style={{ width: 18, height: 18, borderRadius: "50%", background: `${accent}18`, border: `1px solid ${accent}44`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        <Check size={10} style={{ color: accent }} />
                       </span>
                       {f}
                     </li>
                   ))}
                 </ul>
 
-                <Link
-                  href="/book"
-                  className={`w-full text-center font-bold py-3.5 rounded-xl text-sm uppercase tracking-wider transition-all ${
-                    tier.popular
-                      ? "btn-neon"
-                      : "bg-[#1E1E1E] hover:bg-[#2A2A2A] text-gray-200 border border-[#2A2A2A]"
-                  }`}
-                >
+                <Link href="/book" style={{
+                  display: "block", textAlign: "center",
+                  background: tier.popular ? accent : "#1A1D26",
+                  color: tier.popular ? "#000" : "#ccc",
+                  fontWeight: 700, fontSize: 13, letterSpacing: ".08em",
+                  textTransform: "uppercase", padding: "14px",
+                  borderRadius: 12,
+                  border: tier.popular ? "none" : "1px solid #2A2D38",
+                  transition: "opacity .18s",
+                  boxShadow: tier.popular ? `0 0 24px ${bg}` : "none",
+                }}>
                   Book This Slot
                 </Link>
               </motion.div>

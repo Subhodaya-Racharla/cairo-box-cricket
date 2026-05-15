@@ -5,120 +5,97 @@ import { ChevronDown } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      {/* --- Background stack --- */}
-      {/* 1. Photo */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
-        style={{ backgroundImage: "url(https://images.unsplash.com/photo-1624880357913-a8539238245b?w=1600&q=85)" }}
-      />
-      {/* 2. Dark overlay */}
-      <div className="absolute inset-0 bg-black/65" />
-      {/* 3. Gradient vignette */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/10 to-[#0A0A0A]" />
-      {/* 4. Subtle green glow from bottom-left */}
-      <div className="absolute bottom-0 left-0 w-[600px] h-[400px] rounded-full bg-[#00FF87]/8 blur-[120px] pointer-events-none" />
-      {/* 5. Subtle blue glow from top-right */}
-      <div className="absolute top-0 right-0 w-[500px] h-[400px] rounded-full bg-[#00B4FF]/6 blur-[140px] pointer-events-none" />
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden">
+      {/* BG photo */}
+      <div className="absolute inset-0"
+        style={{ backgroundImage: "url(https://images.unsplash.com/photo-1624880357913-a8539238245b?w=1600&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
+      {/* Dark gradient overlay */}
+      <div className="absolute inset-0" style={{ background: "linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.62) 50%,#08080A 100%)" }} />
+      {/* Neon glow blobs */}
+      <div className="absolute bottom-0 left-1/4 w-[500px] h-[300px] rounded-full pointer-events-none" style={{ background: "radial-gradient(ellipse, rgba(0,255,135,.09) 0%, transparent 70%)", filter: "blur(40px)" }} />
+      <div className="absolute top-0 right-0 w-[400px] h-[350px] rounded-full pointer-events-none" style={{ background: "radial-gradient(ellipse, rgba(0,180,255,.07) 0%, transparent 70%)", filter: "blur(60px)" }} />
 
-      {/* --- Live indicator pill --- */}
-      <motion.div
-        initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.1, duration: 0.5 }}
-        className="absolute top-24 right-4 md:top-28 md:right-8 flex items-center gap-2 bg-black/50 backdrop-blur-md border border-red-500/25 rounded-full px-3 py-1.5"
-      >
+      {/* Live pill */}
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }}
+        className="absolute top-24 right-4 md:top-28 md:right-8 flex items-center gap-2 rounded-full px-3 py-1.5"
+        style={{ background: "rgba(0,0,0,.55)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,60,60,.25)" }}>
         <span className="live-dot" />
-        <span className="text-red-400 text-[11px] font-bold tracking-widest">LIVE</span>
-        <span className="text-gray-300 text-[11px]">2 matches now</span>
+        <span style={{ color: "#ff5555", fontSize: 11, fontWeight: 700, letterSpacing: ".12em" }}>LIVE</span>
+        <span style={{ color: "#ccc", fontSize: 11 }}>2 matches in progress</span>
       </motion.div>
 
-      {/* --- Main content --- */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 text-center">
 
-        {/* Eyebrow badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mb-7"
-        >
-          <span className="inline-flex items-center gap-2 border border-[#00FF87]/30 bg-[#00FF87]/8 text-[#00FF87] text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2 rounded-full backdrop-blur-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00FF87] animate-pulse" />
-            Uppal, Hyderabad · Open 24 hours
+        {/* Eyebrow */}
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .2 }} className="mb-6">
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            border: "1px solid rgba(0,255,135,.3)", background: "rgba(0,255,135,.08)",
+            color: "#00FF87", fontSize: 11, fontWeight: 700, letterSpacing: ".2em",
+            textTransform: "uppercase", padding: "8px 20px", borderRadius: 999,
+          }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#00FF87", animation: "ldPulse 1.5s ease-in-out infinite" }} />
+            Uppal, Hyderabad &nbsp;·&nbsp; Open 24 Hours
           </span>
         </motion.div>
 
         {/* Headline */}
-        <motion.div
-          initial={{ opacity: 0, y: 36 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.35 }}
+        <motion.h1
+          initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .35, duration: .65 }}
+          style={{ fontFamily: "var(--font-bebas), Impact, sans-serif", fontSize: "clamp(3rem, 10vw, 7.5rem)", lineHeight: 1, letterSpacing: ".03em", marginBottom: 24 }}
         >
-          <h1 className="text-[clamp(3rem,10vw,7rem)] leading-none tracking-wide text-white mb-6"
-            style={{ fontFamily: "var(--font-bebas), Impact, sans-serif" }}>
-            <span className="block">HYDERABAD'S</span>
-            <span className="block text-gradient-green" style={{ lineHeight: 1.05 }}>PREMIUM</span>
-            <span className="block">BOX CRICKET ARENA</span>
-          </h1>
-        </motion.div>
+          <span style={{ display: "block", color: "#fff" }}>HYDERABAD'S</span>
+          <span className="text-neon" style={{ display: "block", lineHeight: 1.05 }}>PREMIUM</span>
+          <span style={{ display: "block", color: "#fff" }}>BOX CRICKET ARENA</span>
+        </motion.h1>
 
         {/* Subtitle */}
         <motion.p
-          className="text-gray-300 text-lg md:text-xl mb-10 max-w-lg mx-auto leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.55 }}
+          initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .55 }}
+          style={{ color: "#bbb", fontSize: "clamp(15px,2.5vw,19px)", marginBottom: 40, maxWidth: 520, margin: "0 auto 40px" }}
         >
-          Book your slot in <span className="text-[#00FF87] font-bold">30 seconds.</span>{" "}
+          Book your slot in <span style={{ color: "#00FF87", fontWeight: 700 }}>30 seconds.</span>{" "}
           Floodlit nights, premium turf, zero hassle.
         </motion.p>
 
         {/* CTAs */}
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.7 }}
+          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .7 }}
+          style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginBottom: 56 }}
         >
-          <Link href="/book" className="btn-neon w-full sm:w-auto inline-flex items-center justify-center gap-3 px-9 py-4 text-[15px]">
+          <Link href="/book" className="btn-neon" style={{ fontSize: 15, padding: "16px 36px" }}>
             🏏 BOOK NOW — FREE
           </Link>
-          <button className="btn-outline w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 text-[15px] backdrop-blur-sm">
+          <button className="btn-ghost" style={{ fontSize: 15, padding: "15px 32px" }}>
             ▶ &nbsp;WATCH TOUR
           </button>
         </motion.div>
 
         {/* Trust row */}
         <motion.div
-          className="mt-14 flex items-center justify-center gap-8 flex-wrap"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.0 }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
+          style={{ display: "flex", justifyContent: "center", gap: 36, flexWrap: "wrap" }}
         >
-          {[
-            { icon: "⭐", val: "3.9/5", sub: "326 Reviews" },
-            { icon: "🕐", val: "24/7", sub: "Always Open" },
-            { icon: "💰", val: "₹600", sub: "Starting price/hr" },
-          ].map(({ icon, val, sub }) => (
-            <div key={val} className="flex items-center gap-2.5">
-              <span className="text-xl">{icon}</span>
+          {[["⭐", "3.9 / 5", "326 reviews"], ["🕐", "24 / 7", "Always open"], ["💰", "₹600", "Starting/hr"]].map(([icon, val, sub]) => (
+            <div key={val} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 22 }}>{icon}</span>
               <div>
-                <div className="text-white font-bold text-sm leading-tight">{val}</div>
-                <div className="text-gray-500 text-[11px]">{sub}</div>
+                <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, lineHeight: 1.2 }}>{val}</div>
+                <div style={{ color: "#666", fontSize: 11 }}>{sub}</div>
               </div>
             </div>
           ))}
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll arrow */}
       <motion.div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-gray-500"
-        animate={{ y: [0, 7, 0] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-8 left-1/2"
+        style={{ transform: "translateX(-50%)", color: "#444", display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}
+        animate={{ y: [0, 7, 0] }} transition={{ duration: 2, repeat: Infinity }}
       >
-        <span className="text-[10px] tracking-widest uppercase">Scroll</span>
+        <span style={{ fontSize: 10, letterSpacing: ".15em", textTransform: "uppercase" }}>Scroll</span>
         <ChevronDown size={18} />
       </motion.div>
     </section>
