@@ -120,7 +120,7 @@ export default function TournamentsPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-[#0A0A0A] pt-24 pb-24 md:pb-8">
+      <div className="min-h-screen bg-[#0A0A0A] pt-28 pb-24 md:pb-8">
         {/* Hero banner */}
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${t.image})` }} />

@@ -30,7 +30,7 @@ export default function GalleryPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-[#0A0A0A] pt-24 pb-24 md:pb-8">
+      <div className="min-h-screen bg-[#0A0A0A] pt-28 pb-24 md:pb-8">
         <div className="max-w-7xl mx-auto px-4">
           {/* Header */}
           <motion.div className="mb-10" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -63,41 +63,46 @@ export default function GalleryPage() {
             ))}
           </motion.div>
 
-          {/* Masonry grid */}
+          {/* Grid */}
           <motion.div
             ref={gridRef}
             key={filter}
-            className="columns-2 md:columns-3 lg:columns-4 gap-3 space-y-3"
+            style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}
+            className="md:grid-cols-3 lg:grid-cols-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
           >
-            {filtered.map((img, i) => (
-              <motion.div
-                key={img.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={inView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: i * 0.05 }}
-                className="relative break-inside-avoid mb-3 overflow-hidden rounded-xl group cursor-pointer bg-[#1A1A1A]"
-                style={{ aspectRatio: i % 5 === 1 ? "3/4" : i % 7 === 3 ? "1/1.3" : "4/3" }}
-                onClick={() => setLightboxIdx(i)}
-              >
-                <Image
-                  src={img.url}
-                  alt={img.caption}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex items-end p-3">
-                  <div className="translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    <span className="inline-block bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-lg">
+            {filtered.map((img, i) => {
+              const rowHeights = [240, 300, 220, 280, 260, 320, 200, 270, 240, 290, 210, 260, 240, 310, 230];
+              const h = rowHeights[i % rowHeights.length];
+              return (
+                <motion.div
+                  key={img.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={inView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ delay: i * 0.05 }}
+                  style={{ position: "relative", height: h, borderRadius: 12, overflow: "hidden", cursor: "pointer", background: "#1A1D26" }}
+                  className="group"
+                  onClick={() => setLightboxIdx(i)}
+                >
+                  <Image
+                    src={img.url}
+                    alt={img.caption}
+                    fill
+                    style={{ objectFit: "cover", transition: "transform 0.5s ease" }}
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                  <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0)", transition: "background 0.3s", display: "flex", alignItems: "flex-end", padding: 12 }}
+                    className="group-hover:bg-black/50">
+                    <span style={{ background: "rgba(0,0,0,.65)", backdropFilter: "blur(6px)", color: "#fff", fontSize: 11, padding: "4px 10px", borderRadius: 8, opacity: 0, transform: "translateY(8px)", transition: "all 0.3s" }}
+                      className="group-hover:opacity-100 group-hover:translate-y-0">
                       {img.caption}
                     </span>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </motion.div>
 
           {filtered.length === 0 && (
